@@ -1,17 +1,18 @@
-import Server from './classes/server';
+import Server from './clases/server';
+import { router } from './routes/router';
 import bodyParser from 'body-parser';
 import cors from 'cors';
-import {router} from './routes/router';
-//INSTANCIANDO AL SERVIDOR
-const server = new Server();
 
-//CONFIGURANDO A BODYPARSER para que los argumentoss lleguen en el arreglo' body' del request
+const server = Server.instance;
+
+//configurando el body parser
 server.app.use(bodyParser.urlencoded({extended:true}));
 server.app.use(bodyParser.json());
-//CORS
+//configurando el CORS
 server.app.use(cors({origin:true, credentials:true}))
-//CONFIGURANDO LAS RUTAS
+//configurando las rutas
 server.app.use('/',router);
+
 server.start(()=>{
-    console.log(`Servidor corriendo in the port ${server.port}`);
-});
+    console.log(`Servidor corriendo en el puerto ${server.port}`)
+})

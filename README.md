@@ -1,17 +1,18 @@
-#MI -Socket-Server
+#Socket-Server
 
-Pasos para reconstruir los modulos de Node
+Reconstruir módulos de Node
+
 ```
 npm install
 ```
-Pasos para generar la carpeta dist/
+
+Generar la carpeta DIST
 ```
 tsc -w
 ```
-Como levantar el servidor?
+
+Levantar el servidor con cualquiera de los siguientes comandos
 ```
 nodemon dist/
+node dist/
 ```
-
-
-

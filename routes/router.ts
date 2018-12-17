@@ -1,28 +1,35 @@
-import {Router,Request,Response} from 'express';
+import {Router, Request, Response} from 'express';
 
+export const router = Router();
 
-export var router = Router();
-
-router.get('/mensajes',(req:Request,res:Response)=>{
-    res.status(200).send({ok:true,message:"Mensaje correcto"})
+router.get('/mensajes',(req:Request, res:Response)=>{
+    res.json({
+        ok:true,
+        mensaje: 'Respuesta ok!'
+    })
 });
 
-router.post('/mensajes',(req:Request,res:Response)=>{
-    var entrada = req.body.entrada;
-    res.status(200).send({
+router.post('/mensajes',(req:Request, res:Response)=>{
+
+    const cuerpo = req.body.cuerpo;
+    
+
+    res.json({
         ok:true,
-        message:"Mensaje correcto",
-        entrada:entrada
-    });
+        mensaje: 'Respuesta ok! con post',
+        cuerpo
+    })
 });
 
-router.post('/mensajes/:id',(req:Request,res:Response)=>{
-    var entrada = req.body.entrada;
-    var id = req.params.id;
-    res.status(200).send({
+router.post('/mensajes/:id',(req:Request, res:Response)=>{
+
+    const cuerpo = req.body.cuerpo;
+    const id = req.params.id;
+
+    res.json({
         ok:true,
-        message:"Mensaje correcto",
-        entrada:entrada,
-        id:id
-    });
+        mensaje: 'Respuesta ok! con post',
+        cuerpo,
+        id
+    })
 });
