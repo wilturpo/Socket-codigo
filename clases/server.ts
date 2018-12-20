@@ -2,16 +2,18 @@ import { SERVER_PORT } from '../globals/environment';
 import express from 'express';
 import socketIO from 'socket.io';
 import http from 'http';
+import { UsuariosLista } from './usuario-lista';
+import { Usuario } from './usuario';
 
 export default class Server{
 
-    private static _instance:Server;
-
     public app:express.Application;
     public port:Number;
-    //servicor para emitir y escuchar eventos
+    //servidor para emitir y escuchar eventos
     public io: socketIO.Server;
     private httpServer:http.Server;
+    public usuariosConectados = new UsuariosLista();
+
 
     private constructor(){
         this.app = express();
@@ -22,6 +24,10 @@ export default class Server{
         this.io = socketIO(this.httpServer);
         this.escucharSockets();
     }
+    //PROGRAMANDO GETTER
+    //DE LA UNICA INSTANCIA DE LA CLASE
+    //PATRON DE DISEÑO SINGLETON
+    private static _instance:Server;
 
     public static get instance(){
         if(this._instance){
@@ -35,15 +41,25 @@ export default class Server{
     private escucharSockets(){
         console.log("Escuchando conexiones o sockets");
         this.io.on('connection',cliente=>{
-            console.log("nuevo cliente conectado");
+            console.log("nuevo cliente conectado",cliente.id);
+            const usuario = new Usuario(cliente.id);
+            this.usuariosConectados.agregar(usuario);
+            //CUANDO EL CLIENTE SE DESCONECTA
             cliente.on('disconnect',()=>{
-                console.log("nuevo cliente desconectado");
+                console.log("nuevo cliente desconectado",cliente.id);
+                this.usuariosConectados.borrarUsuario(cliente.id);
             });
             cliente.on('mensaje',(payload:any)=>{
                 console.log("nuevo mensaje ",payload);
                 this.io.emit("mensaje-nuevo",payload);
             });
-
+            cliente.on("configurar-usuario",(payload:any,callback:Function)=>{
+                this.usuariosConectados.actualizarNombre(cliente.id,payload.nombre);
+                callback({
+                    ok:true,
+                    mensaje:`Usuario ${payload.nombre} configurado`
+                });
+            })
         });
     }
 
