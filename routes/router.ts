@@ -55,7 +55,7 @@ router.post('/mensajes',(req:Request,res:Response)=>{
         var id = req.params.id;
         const payload = {
             de:de,
-            entrada:entrada
+            cuerpo:entrada
         }
         const server = Server.instance;
         server.io.in(id).emit('mensaje-privado',payload);
@@ -71,3 +71,55 @@ router.post('/mensajes',(req:Request,res:Response)=>{
         
 
 });
+
+
+
+router.get('/usuarios',(req:Request,res:Response)=>{
+    const server = Server.instance;
+    //RETORNA EL ARREGLO DE SOCKETS CONECTADOS
+    server.io.clients((err:any,clientes:string[])=>{
+        if(err){
+            return res.status(505).send({
+                ok:false,
+                err:err
+            });
+        }else{
+            return res.status(200).send({
+                ok:true,
+                clientes
+            });
+        }
+    });
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

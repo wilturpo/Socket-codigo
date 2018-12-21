@@ -12,7 +12,13 @@ export class UsuariosLista{
     }
 
     public getLista(){
-        return this.lista;
+        let listaTemporal = this.lista.filter((usuario)=>{
+            if(usuario.nombre !== 'sin nombre'){
+                return usuario;
+            };
+        });
+        return listaTemporal;
+        
     }
 
     public actualizarNombre(id:string,nombre:string){
